@@ -191,8 +191,9 @@ class SiteController extends Controller
      */
     public function actionRedisUserRegister()
     {
-        // 批量注册10个用户
+        // 批量注册10个用户, todo 先检查邮箱是否唯一
         for($i=0; $i<10; $i++) {
+
             $userID = Yii::$app->redis->incr("users:count");
             $email = "dcj3sjt@126.com".$userID;
             Yii::$app->redis->hmset("user:{$userID}", "email", $email, "password", md5("adminadmin"), "nickname", "maxwelldu".$userID);
@@ -269,7 +270,7 @@ class SiteController extends Controller
      */
     public function actionRedisWeibos()
     {
-        /* 代码是错误的
+        /* todo 代码是错误的
         $posts = Yii::$app->redis->hgetall("post:*");
         foreach($posts as $post) {
             var_dump($post);
@@ -287,9 +288,11 @@ class SiteController extends Controller
         $uid = 1;
         $uid2 = 2;
         $uid3 = 3;
+        // todo 不能重复关注
         Yii::$app->redis->rpush("followers:$uid", $uid2); //将2添加为1的粉丝
         Yii::$app->redis->rpush("followers:$uid", $uid3); //将3添加为1的粉丝
 
+        // todo 不能重复添加
         Yii::$app->redis->rpush("following:$uid", $uid2); //2关注的有1
         Yii::$app->redis->rpush("following:$uid", $uid3); //3关注的有1
     }
