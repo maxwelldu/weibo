@@ -189,9 +189,11 @@ class SiteController extends Controller
     public function actionTestRedis()
     {
         $user = new UserModel();
-        $user->attributes = ["username" => "maxwelldu", "password" => md5("maxwelldu")];
+        $user->attributes = ["username" => "maxwelldu", "password" => "123456"];
         $user->save();
         echo $user->id;
+
+
 
         $user = UserModel::find()->where(["username" => "maxwelldu"])->one();
         print_r($user);
