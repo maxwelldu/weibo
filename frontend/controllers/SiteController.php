@@ -251,6 +251,18 @@ class SiteController extends Controller
         }
     }
 
+    /**
+     * 查询userid 为 1的人的微博列表
+     */
+    public function actionRedisMyWeiboList()
+    {
+        $userID = 1;
+        $posts = Yii::$app->redis->lrange("posts:$userID", 0, Yii::$app->redis->get("posts:count"));
+        foreach($posts as $post) {
+            var_dump($post);
+        }
+    }
+
     public function actionTestRedis()
     {
         //Yii::$app->redis->executeCommand('HMSET', ['user:1', 'name', 'joe', 'solary', 2000]);
