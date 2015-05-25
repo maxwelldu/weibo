@@ -205,7 +205,21 @@ class SiteController extends Controller
         }
 
 
+        //登录, 获取邮箱, 去查id
+        $email = "dcj3sjt@126.com1";
+        $userID = Yii::$app->redis->hget("email.to.id", $email);
+        if(!$userID) {
+            echo '用户名或密码错误!';
+            exit;
+        }
 
+        $password = md5("adminadmin");
+        $userpassword = Yii::$app->redis->hget("user:{$userID}", "password");
+        if($password != $userpassword) {
+            echo "用户登录失败";
+            exit;
+        }
+        echo "用户登录成功";
 
 
 
