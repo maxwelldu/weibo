@@ -186,9 +186,11 @@ class SiteController extends Controller
         return $value;
     }
 
-    public function actionTestRedis()
+    /**
+     * 测试用户注册
+     */
+    public function actionRedisUserRegister()
     {
-        Yii::$app->redis->flushall();
         // 批量注册10个用户
         for($i=0; $i<10; $i++) {
             $userID = Yii::$app->redis->incr("users:count");
@@ -198,14 +200,21 @@ class SiteController extends Controller
 
             echo "注册成功";
         }
+    }
 
-        //检测邮箱是否已经注册
-        if ( Yii::$app->redis->hexists('email.to.id', "dcj3sjt@126.com") ) {
-            echo '该邮箱已经注册过了';
-            exit;
-        }
+    /**
+     * 清空所有的数据
+     */
+    public function actionRedisClear()
+    {
+        Yii::$app->redis->flushall();
+    }
 
-
+    /**
+     * 用户登录
+     */
+    public function actionRedisUserLogin()
+    {
         //登录, 获取邮箱, 去查id
         $email = "dcj3sjt@126.com1";
         $userID = Yii::$app->redis->hget("email.to.id", $email);
@@ -221,9 +230,28 @@ class SiteController extends Controller
             exit;
         }
         echo "用户登录成功";
+    }
 
+    /**
+     * 发布微博
+     */
+    public function actionRedisPublisPost()
+    {
+        // 批量发布10条微博
+        for($i=0; $i<10; $i++) {
+            $postID = Yii::$app->redis->incr("posts:count");
+            $uid = $i+1;
+            $username = "test".$i;
+            $created_at = time();
+            $content = "contnet ".$i;
+            Yii::$app->redis->hmset("post:{$postID}", "uid", $uid, "username", $username, "created_at", $created_at, "content", $content);
 
+            echo "微博成功";
+        }
+    }
 
+    public function actionTestRedis()
+    {
         //Yii::$app->redis->executeCommand('HMSET', ['user:1', 'name', 'joe', 'solary', 2000]);
 //        Yii::$app->redis->set("site1", "www.baidu.com");
 //        Yii::$app->redis->set("site2", "www.google.com");
