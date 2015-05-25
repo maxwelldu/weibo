@@ -258,7 +258,8 @@ class SiteController extends Controller
     {
         $userID = 1;
         $posts = Yii::$app->redis->lrange("posts:$userID", 0, Yii::$app->redis->get("posts:count"));
-        foreach($posts as $post) {
+        foreach($posts as $postID) {
+            $post = Yii::$app->redis->hvals("post:$postID");
             var_dump($post);
         }
     }
