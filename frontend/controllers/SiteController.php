@@ -246,7 +246,7 @@ class SiteController extends Controller
             $created_at = time();
             $content = "contnet ".$i;
             Yii::$app->redis->hmset("post:{$postID}", "uid", $uid, "username", $username, "created_at", $created_at, "content", $content);
-
+            Yii::$app->redis->rpush("user.to.post", $uid, $postID);
             echo "微博成功";
         }
     }
