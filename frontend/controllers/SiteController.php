@@ -193,9 +193,7 @@ class SiteController extends Controller
         $user->save();
         echo $user->id;
 
-
-
-        $user = UserModel::find()->where(["username" => "maxwelldu"])->one();
-        print_r($user);
+        $u = UserModel::find()->where(["username" => "maxwelldu"])->one();
+        print_r($u);
     }
 }
