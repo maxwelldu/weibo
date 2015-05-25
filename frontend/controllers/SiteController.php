@@ -204,7 +204,9 @@ class SiteController extends Controller
 
         $customer = User::find()->where(['name' => 'test'])->one(); // find by query
         var_dump($customer);
-        $customer = User::find()->active()->all(); // find all by query
-        var_dump($customer);
+        $customers = User::find()->active()->all(); // find all by query
+        foreach($customers as $c) {
+            var_dump($c);
+        }
     }
 }
