@@ -269,10 +269,12 @@ class SiteController extends Controller
      */
     public function actionRedisWeibos()
     {
+        /* 代码是错误的
         $posts = Yii::$app->redis->hgetall("post:*");
         foreach($posts as $post) {
             var_dump($post);
         }
+        */
     }
 
     /**
@@ -297,7 +299,7 @@ class SiteController extends Controller
      */
     public function actionRedisFollowWeibos()
     {
-
+        //todo
     }
 
 
