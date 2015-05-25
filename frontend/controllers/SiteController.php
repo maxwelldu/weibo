@@ -12,7 +12,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use frontend\models\UserModel;
+use frontend\models\User;
 
 /**
  * Site controller
@@ -188,12 +188,23 @@ class SiteController extends Controller
 
     public function actionTestRedis()
     {
-        $user = new UserModel();
-        $user->attributes = ["username" => "maxwelldu", "password" => "123456"];
-        $user->save();
-        echo $user->id;
+        Yii::$app->redis->set("site1", "www.baidu.com");
+        Yii::$app->redis->set("site2", "www.google.com");
 
-        $u = UserModel::find()->where(["username" => "maxwelldu"])->one();
-        print_r($u);
+        echo Yii::$app->redis->get("site1");
+        echo Yii::$app->redis->get("site2");
+
+//        删除 redis中的所有数据
+//        Yii::$app->redis->flushall();
+
+        $customer = new User();
+        $customer->attributes = ['name' => 'test'];
+        $customer->save();
+        echo $customer->id; // id will automatically be incremented if not set explicitly
+
+        $customer = User::find()->where(['name' => 'test'])->one(); // find by query
+        var_dump($customer);
+        $customer = User::find()->active()->all(); // find all by query
+        var_dump($customer);
     }
 }
