@@ -188,11 +188,12 @@ class SiteController extends Controller
 
     public function actionTestRedis()
     {
+        Yii::$app->redis->flushall();
         // 批量注册10个用户
         for($i=0; $i<10; $i++) {
             $userID = Yii::$app->redis->incr("users:count");
-            $email = "dcj3sjt@126.com";
-            Yii::$app->redis->hmset("user:{$userID}", "email", $email.$userID, "password", md5("adminadmin"), "nickname", "maxwelldu".$userID);
+            $email = "dcj3sjt@126.com".$userID;
+            Yii::$app->redis->hmset("user:{$userID}", "email", $email, "password", md5("adminadmin"), "nickname", "maxwelldu".$userID);
             Yii::$app->redis->hset("email.to.id", $email, $userID);
 
             echo "注册成功";
