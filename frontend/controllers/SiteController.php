@@ -265,17 +265,42 @@ class SiteController extends Controller
     }
 
     /**
+     * 所有的微博
+     */
+    public function actionRedisWeibos()
+    {
+        $posts = Yii::$app->redis->hgetall("post:*");
+        foreach($posts as $post) {
+            var_dump($post);
+        }
+    }
+
+    /**
      * 关注人
      */
     public function actionRedisFollow()
     {
         // 2, 3 关注  1
+        // 1 的粉丝有 2和3, 2关注的人有1, 3关注的人有1
         $uid = 1;
-        $followuid = 2;
-        $followuid2 = 3;
-        Yii::$app->redis->rpush("following:$uid", $followuid);
-        Yii::$app->redis->rpush("following:$uid", $followuid2);
+        $uid2 = 2;
+        $uid3 = 3;
+        Yii::$app->redis->rpush("followers:$uid", $uid2); //将2添加为1的粉丝
+        Yii::$app->redis->rpush("followers:$uid", $uid3); //将3添加为1的粉丝
+
+        Yii::$app->redis->rpush("following:$uid", $uid2); //2关注的有1
+        Yii::$app->redis->rpush("following:$uid", $uid3); //3关注的有1
     }
+
+    /**
+     * 我关注的人的微博
+     */
+    public function actionRedisFollowWeibos()
+    {
+
+    }
+
+
 
     public function actionTestRedis()
     {
