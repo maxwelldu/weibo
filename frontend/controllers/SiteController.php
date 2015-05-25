@@ -188,25 +188,49 @@ class SiteController extends Controller
 
     public function actionTestRedis()
     {
-        Yii::$app->redis->set("site1", "www.baidu.com");
-        Yii::$app->redis->set("site2", "www.google.com");
+        // 批量注册10个用户
+        for($i=0; $i<10; $i++) {
+            $userID = Yii::$app->redis->incr("users:count");
+            $email = "dcj3sjt@126.com";
+            Yii::$app->redis->hmset("user:{$userID}", "email", $email.$userID, "password", md5("adminadmin"), "nickname", "maxwelldu".$userID);
+            Yii::$app->redis->hset("email.to.id", $email, $userID);
 
-        echo Yii::$app->redis->get("site1");
-        echo Yii::$app->redis->get("site2");
+            echo "注册成功";
+        }
+
+        //检测邮箱是否已经注册
+        if ( Yii::$app->redis->hexists('email.to.id', "dcj3sjt@126.com") ) {
+            echo '该邮箱已经注册过了';
+            exit;
+        }
+
+
+
+
+
+
+        //Yii::$app->redis->executeCommand('HMSET', ['user:1', 'name', 'joe', 'solary', 2000]);
+//        Yii::$app->redis->set("site1", "www.baidu.com");
+//        Yii::$app->redis->set("site2", "www.google.com");
+
+//        echo Yii::$app->redis->get("site1");
+//        echo Yii::$app->redis->get("site2");
 
 //        删除 redis中的所有数据
 //        Yii::$app->redis->flushall();
 
-        $customer = new User();
-        $customer->attributes = ['name' => 'test'];
-        $customer->save();
-        echo $customer->id; // id will automatically be incremented if not set explicitly
+//        $customer = new User();
+//        $customer->attributes = ['name' => 'test'];
+//        $customer->save();
+//        echo $customer->id; // id will automatically be incremented if not set explicitly
 
+        /*
         $customer = User::find()->where(['name' => 'test'])->one(); // find by query
         var_dump($customer);
         $customers = User::find()->active()->all(); // find all by query
         foreach($customers as $c) {
             var_dump($c);
         }
+        */
     }
 }
