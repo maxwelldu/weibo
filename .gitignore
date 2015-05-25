@@ -1,0 +1,11 @@
+.idea
+.vagrant
+Vagrantfile
+vendor
+.DS_Store
+/yii
+/nohup.out
+/_etc_nginix_conf.d
+.*.swp
+/apidocs/*
+apidocs.zip
