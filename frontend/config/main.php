@@ -14,7 +14,7 @@ return [
     'components' => [
         'redis' => [
             'class' => 'yii\redis\Connection',
-            'hostname' => 'localhost',
+            'hostname' => '123.56.135.230',
             'port' => 6379,
             'database' => 0,
         ],
