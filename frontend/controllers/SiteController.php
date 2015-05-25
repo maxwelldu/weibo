@@ -264,6 +264,19 @@ class SiteController extends Controller
         }
     }
 
+    /**
+     * 关注人
+     */
+    public function actionRedisFollow()
+    {
+        // 2, 3 关注  1
+        $uid = 1;
+        $followuid = 2;
+        $followuid2 = 3;
+        Yii::$app->redis->rpush("following:$uid", $followuid);
+        Yii::$app->redis->rpush("following:$uid", $followuid2);
+    }
+
     public function actionTestRedis()
     {
         //Yii::$app->redis->executeCommand('HMSET', ['user:1', 'name', 'joe', 'solary', 2000]);
