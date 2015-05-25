@@ -208,6 +208,7 @@ class SiteController extends Controller
     public function actionRedisClear()
     {
         Yii::$app->redis->flushall();
+        echo '已经清空所有数据';
     }
 
     /**
@@ -235,7 +236,7 @@ class SiteController extends Controller
     /**
      * 发布微博
      */
-    public function actionRedisPublisPost()
+    public function actionRedisPublishPost()
     {
         // 批量发布10条微博
         for($i=0; $i<10; $i++) {
