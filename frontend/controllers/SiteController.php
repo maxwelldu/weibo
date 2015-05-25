@@ -12,6 +12,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use frontend\models\UserModel;
 
 /**
  * Site controller
@@ -169,15 +170,30 @@ class SiteController extends Controller
         ]);
     }
 
+    /**
+     * test memcache
+     * @return mixed|string
+     */
 	public function actionTestMemcache()
-{
-	$key = "username";
-	//Yii::$app->cache->delete($key);
-	$value = Yii::$app->cache->get($key);
-	if ($value === false) {
-		$value = "maxwelldu ";
-		Yii::$app->cache->set($key, $value, 30);
-	}
-	return $value;
-}
+    {
+        $key = "username";
+        //Yii::$app->cache->delete($key);
+        $value = Yii::$app->cache->get($key);
+        if ($value === false) {
+            $value = "maxwelldu ";
+            Yii::$app->cache->set($key, $value, 30);
+        }
+        return $value;
+    }
+
+    public function actionTestRedis()
+    {
+        $user = new UserModel();
+        $user->attributes = ["username" => "maxwelldu", "password" => md5("maxwelldu")];
+        $user->save();
+        echo $user->id;
+
+        $user = UserModel::find()->where(["username" => "maxwelldu"])->one();
+        print_r($user);
+    }
 }
