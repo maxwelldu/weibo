@@ -33,6 +33,7 @@ class User extends  \yii\redis\ActiveRecord
      */
     public static function active($query)
     {
+        
         $query->andWhere(['status' => 1]);
     }
 }
