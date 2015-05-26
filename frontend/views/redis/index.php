@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
             foreach($users as $user) {
             ?>
                 <li class="list-group-item list-group-item-info">
-                    <span>用户名: <?php echo $user[5]; ?></span>
+                    <span class="glyphicon glyphicon-user"> <?php echo $user[5]; ?></span>
                     <?php
                     if(Yii::$app->session->get('userid')>0) :
                     ?>
