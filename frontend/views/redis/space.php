@@ -23,10 +23,12 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php
             foreach($posts as $post) {
                 ?>
-                <div class="row">
-                    <span>作者: <?php echo $post[1]; ?></span>
-                    <span>发布时间: <?php echo date('y-m-d H:i:s', $post[2]); ?></span>
-                    <span>微博内容: <?php echo $post[3]; ?></span>
+                <div class="well">
+                    <span><?php echo $post[1]; ?></span>
+                    <br />
+                    <span><?php echo $post[3]; ?></span>
+                    <br />
+                    <span style="color: darkgray"><?php echo date('y-m-d H:i:s', $post[2]); ?></span>
                 </div>
             <?php
             }
@@ -37,25 +39,47 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-lg-6">
             <h3>关注的人</h3>
-            <?php
-            foreach($followingusers as $user) {
+            <ul class="list-group">
+                <?php
+                $i = 1;
+                foreach($followingusers as $user) {
+                    ?>
+                    <li class="list-group-item list-group-item-info">
+                        <span class="glyphicon glyphicon-user"> <?php echo $user[5]; ?></span>
+                        <?php
+                        if(Yii::$app->session->get('userid')>0) :
+                            ?>
+                            <?= Html::a('关注', '?r=redis/follow&userid='.$i++,  ['class' => 'btn btn-primary']) ?>
+                        <?php
+                        endif;
+                        ?>
+                    </li>
+                <?php
+                }
                 ?>
-                <span>用户名: <?php echo $user[2]; ?></span>
-                <hr />
-            <?php
-            }
-            ?>
+            </ul>
         </div>
         <div class="col-lg-6">
             <h3>我的粉丝</h3>
-            <?php
-            foreach($followersusers as $user) {
+            <ul class="list-group">
+                <?php
+                $i = 1;
+                foreach($followersusers as $user) {
+                    ?>
+                    <li class="list-group-item list-group-item-info">
+                        <span class="glyphicon glyphicon-user"> <?php echo $user[5]; ?></span>
+                        <?php
+                        if(Yii::$app->session->get('userid')>0) :
+                            ?>
+                            <?= Html::a('关注', '?r=redis/follow&userid='.$i++,  ['class' => 'btn btn-primary']) ?>
+                        <?php
+                        endif;
+                        ?>
+                    </li>
+                <?php
+                }
                 ?>
-                <span>用户名: <?php echo $user[2]; ?></span>
-                <hr />
-            <?php
-            }
-            ?>
+            </ul>
         </div>
     </div>
 </div>
