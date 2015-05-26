@@ -132,6 +132,12 @@ class RedisController extends Controller
      */
     public function actionIndex()
     {
+
+        //显示所有的用户, 分页显示
+
+        // 如果用户没有登录则显示所有的微博
+        // 用户登录过就只显示我所关注的所有的微博
+
         $userID = Yii::$app->session->get("userid");
         $posts = array();
 
@@ -144,8 +150,16 @@ class RedisController extends Controller
             }
         }
 
+        $userids = Yii::$app->redis->lrange("user:$userID", 0, Yii::$app->redis->get("users:count"));
+
+        foreach ($userids as $userID) {
+            $user = Yii::$app->redis->hvals("user:$userID");
+            $users[] = $user;
+        }
+
         return $this->render('index', [
-            'posts' => $posts
+            'posts' => $posts,
+            'users' => $users,
         ]);
     }
 

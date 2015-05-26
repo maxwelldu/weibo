@@ -19,18 +19,29 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <div class="row">
-        <div class="col-lg-5">
+        <div class="col-lg-8">
             <?php
                 foreach($posts as $post) {
             ?>
-            <div class="row">
                 <span>作者: <?php echo $post[1]; ?></span>
                 <span>发布时间: <?php echo date('y-m-d H:i:s', $post[2]); ?></span>
                 <span>微博内容: <?php echo $post[3]; ?></span>
-            </div>
+            <hr />
             <?php
                 }
             ?>
         </div>
+        <div class="col-lg-4">
+            <?php
+            var_dump($users);
+            foreach($users as $user) {
+                ?>
+                    <span>用户名: <?php echo $user[1]; ?></span>
+                <hr />
+            <?php
+            }
+            ?>
+        </div>
+
     </div>
 </div>
