@@ -283,6 +283,7 @@ class RedisController extends Controller
         $userID = Yii::$app->session->get("userid");
         $userids = Yii::$app->redis->lrange("followers:$userID", 0, -1);
 
+        $users = array();
         foreach ($userids as $uid) {
             $user = Yii::$app->redis->hvals("user:$uid");
             $users[] = $user;
