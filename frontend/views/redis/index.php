@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <br />
                 <span><?php echo $post[3]; ?></span>
                         <br />
-                        <span>发布时间: <?php echo date('y-m-d H:i:s', $post[2]); ?></span>
+                        <span style="color: darkgray"><?php echo date('y-m-d H:i:s', $post[2]); ?></span>
                     </div>
             <?php
                 }
