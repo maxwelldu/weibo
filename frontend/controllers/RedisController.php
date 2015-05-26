@@ -28,7 +28,7 @@ class RedisController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'signup', 'logout', 'login', 'index', 'follow',
+                    'signup', 'logout', 'login', 'index', 'follow', 'my-following', 'my-followers'
                 ],
             ],
         ];
