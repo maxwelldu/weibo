@@ -12,6 +12,7 @@ use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use frontend\models\SignupForm;
+use frontend\models\LoginForm;
 use yii\filters\AccessControl;
 
 
