@@ -12,7 +12,7 @@ use yii\bootstrap\ActiveForm;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model \frontend\models\SignupForm */
 
-$this->title = '我关注的微博';
+$this->title = '微博';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-signup">
@@ -36,9 +36,15 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php
             $i = 1;
             foreach($users as $user) {
+            ?>
+                <span>用户名: <?php echo $user[5]; ?></span>
+                <?php
+                if(Yii::$app->session->get('userid')>0) :
                 ?>
-                    <span>用户名: <?php echo $user[5]; ?></span>
-                <?= Html::a('关注', '?r=redis/follow&userid='.$i++,  ['class' => 'btn btn-primary']) ?>
+                 <?= Html::a('关注', '?r=redis/follow&userid='.$i++,  ['class' => 'btn btn-primary']) ?>
+                <?php
+                endif;
+                ?>
                 <hr />
             <?php
             }
