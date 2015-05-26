@@ -154,6 +154,7 @@ class RedisController extends Controller
         $usercount = Yii::$app->redis->get("users:count");
         for($i=1; $i<=$usercount; $i++) {
             $user = Yii::$app->redis->hgetall("user:$i");
+            $user['id'] = $i;
             $users[] = $user;
         }
 
@@ -207,5 +208,18 @@ class RedisController extends Controller
                 'model' => $model,
             ]);
         }
+    }
+
+    public function actionFollow()
+    {
+        // 1 关注 2  2 的 粉丝里面有1
+        $userID = Yii::$app->session->get("userid");
+        $followUserID = Yii::$app->request->get("userid");
+
+        // todo 不能重复关注, 粉丝
+        Yii::$app->redis->rpush("followers:$followUserID", $userID); //1成为2的粉丝
+
+        // todo 不能重复添加
+        Yii::$app->redis->rpush("following:$userID", $followUserID); //将2添加到我关注的人列表当中来
     }
 }
