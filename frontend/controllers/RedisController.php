@@ -232,16 +232,21 @@ class RedisController extends Controller
     public function actionFollow()
     {
         $userID = Yii::$app->session->get("userid");
+        if($userID<1) {
+            $this->goBack();
+        }
+
         $followUserID = Yii::$app->request->get("userid");
 
         //不能关注自己
-        if ($userID == $followUserID || $userID<1) {
+        if ($userID == $followUserID) {
             return $this->goHome();
         }
 
-        // 不能重复添加粉丝
-        if(!Yii::$app->redis->lindex("followers:$followUserID", $userID)) {
-            Yii::$app->redis->rpush("followers:$followUserID", $userID);
+        // 不能重复添加粉丝, 这里使用集合, 如果存在则会忽略, 不存在则会新建
+        $followerNum = Yii::$app->redis->scard("followers:$followUserID");
+        $newNum = Yii::$app->redis->sadd("followers:$followUserID", $userID);
+        if ($newNum > $followerNum) {
             // 被关注的用户粉丝数+1
             Yii::$app->redis->hincrby("user:$followUserID", "fans", 1);
         }
