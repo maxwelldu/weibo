@@ -63,7 +63,7 @@ class RedisController extends Controller
 
     public function actionLogout()
     {
-        Yii::$app->getSession()->destroy();
+        Yii::$app->session->set("userid", 0);
 
         return $this->goHome();
     }

@@ -37,7 +37,7 @@ AppAsset::register($this);
 //                ['label' => 'About', 'url' => ['/site/about']],
 //                ['label' => 'Contact', 'url' => ['/site/contact']],
             ];
-            if (!Yii::$app->session->get("userid")) {
+            if (Yii::$app->session->get("userid")<=0) {
                 $menuItems[] = ['label' => 'Signup', 'url' => ['/redis/signup']];
                 $menuItems[] = ['label' => 'Login', 'url' => ['/redis/login']];
             } else {
