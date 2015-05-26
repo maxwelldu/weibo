@@ -28,7 +28,7 @@ class RedisController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'signup', 'logout', 'login', 'index', 'follow',
+                    'signup', 'logout', 'login', 'index', 'follow', 'my-following', 'my-followers'
                 ],
             ],
         ];
@@ -257,8 +257,17 @@ class RedisController extends Controller
     /**
      * 我的粉丝
      */
-    public function actionMyFollows()
+    public function actionMyFollowers()
     {
+        $userID = Yii::$app->session->get("userid");
+        $userids = Yii::$app->redis->lrange("followers:$userID", 0, Yii::$app->redis->llen("followers:$userID"));
 
+        foreach ($userids as $uid) {
+            $user = Yii::$app->redis->hvals("user:$uid");
+            $users[] = $user;
+        }
+        return $this->render('myfollowers', [
+            'users' => $users,
+        ]);
     }
 }

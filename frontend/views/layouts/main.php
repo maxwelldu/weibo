@@ -56,11 +56,11 @@ AppAsset::register($this);
                 ];
                 $menuItems[] = [
                     'label' => '关注的人',
-                    'url' => ['/redis/myfollowing'],
+                    'url' => ['/redis/my-following'],
                 ];
                 $menuItems[] = [
                     'label' => '我的粉丝',
-                    'url' => ['/redis/myfollows'],
+                    'url' => ['/redis/my-followers'],
                 ];
             }
             echo Nav::widget([
