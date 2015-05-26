@@ -53,7 +53,7 @@ class RedisController extends Controller
             echo "注册成功";
             Yii::$app->session->set("userid", $userID);
             Yii::$app->session->set("username", $username);
-            return $this->render('index');
+            return $this->goHome();
 //            if ($user = $model->signup()) {
 //                if (Yii::$app->getUser()->login($user)) {
 //                    return $this->goHome();
