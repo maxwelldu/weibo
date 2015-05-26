@@ -21,8 +21,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-lg-5">
             <?php
-            echo Yii::$app->session->get('userid');
-            echo Yii::$app->session->get("username");
+                foreach($posts as $post) {
+                    var_dump($post);
+                }
             ?>
         </div>
     </div>

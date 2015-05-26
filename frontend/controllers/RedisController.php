@@ -116,6 +116,32 @@ class RedisController extends Controller
 
     public function actionIndex()
     {
-        return $this->render('index');
+        $userID = Yii::$app->session->get("userid");
+        $posts = array();
+
+        if($userID>0) {
+            $postids = Yii::$app->redis->lrange("posts:$userID", 0, Yii::$app->redis->get("posts:count"));
+
+            foreach ($postids as $postID) {
+                $post = Yii::$app->redis->hvals("post:$postID");
+                $posts[] = $post;
+            }
+        }
+
+        return $this->render('index', [
+            'post' => $posts
+        ]);
+    }
+
+    public function actionPublis()
+    {
+        $postID = Yii::$app->redis->incr("posts:count");
+        $uid = Yii::$app->session->get("userid");
+        $username = Yii::$app->redis->hget("user:$uid", "username");
+        $created_at = time();
+        $content = "test content";
+        Yii::$app->redis->hmset("post:{$postID}", "uid", $uid, "username", $username, "created_at", $created_at, "content", $content);
+        Yii::$app->redis->rpush("posts:$uid", $postID);
+        echo "微博成功";
     }
 }
