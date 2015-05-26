@@ -66,6 +66,13 @@ class RedisController extends Controller
         ]);
     }
 
+    public function actionLogout()
+    {
+        Yii::$app->getSession()->destroy();
+
+        return $this->goHome();
+    }
+
     public function actionIndex()
     {
         return $this->render('index');
