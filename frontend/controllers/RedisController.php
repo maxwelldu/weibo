@@ -293,22 +293,24 @@ class RedisController extends Controller
         ]);
     }
 
+    /**
+     * 我的页面
+     * @return string
+     */
     public function actionSpace()
     {
         $userID = Yii::$app->session->get("userid");
 
         // 我的信息
-        $user = Yii::$app->redis->hget("user:$userID");
+        $userinfo = Yii::$app->redis->hvals("user:$userID");
 
         // 我发布的微博
         $posts = array();
-        if($userID>0) {
-            $postids = Yii::$app->redis->lrange("posts:$userID", 0, -1);
+        $postids = Yii::$app->redis->lrange("posts:$userID", 0, -1);
 
-            foreach ($postids as $postID) {
-                $post = Yii::$app->redis->hvals("post:$postID");
-                $posts[] = $post;
-            }
+        foreach ($postids as $postID) {
+            $post = Yii::$app->redis->hvals("post:$postID");
+            $posts[] = $post;
         }
 
         // 我关注的人
@@ -329,7 +331,7 @@ class RedisController extends Controller
             $followersusers[] = $user;
         }
         return $this->render('space', [
-            'user' => $user,
+            'userinfo' => $userinfo,
             'posts' => $posts,
             'followingusers' => $followingusers,
             'followersusers' => $followersusers,
