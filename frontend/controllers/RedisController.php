@@ -227,7 +227,7 @@ class RedisController extends Controller
         $followUserID = Yii::$app->request->get("userid");
 
         //不能关注自己
-        if ($userID == $followUserID) {
+        if ($userID == $followUserID || $userID<1) {
             return $this->goHome();
         }
 
