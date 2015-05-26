@@ -146,14 +146,14 @@ class RedisController extends Controller
         $posts = array();
 
         if ($userID>0) {
-            $postids = Yii::$app->redis->lrange("posts:$userID", 0, Yii::$app->redis->get("posts:count"));
+            $postids = Yii::$app->redis->lrange("posts:$userID", 0, -1);
 
             foreach ($postids as $postID) {
                 $post = Yii::$app->redis->hvals("post:$postID");
                 $posts[] = $post;
             }
         } else {
-            $postids = Yii::$app->redis->lrange("posts:*", 0, Yii::$app->redis->get("posts:count"));
+            $postids = Yii::$app->redis->lrange("posts:*", 0, -1);
 
             foreach ($postids as $postID) {
                 $post = Yii::$app->redis->hvals("post:$postID");
@@ -184,7 +184,7 @@ class RedisController extends Controller
         $posts = array();
 
         if($userID>0) {
-            $postids = Yii::$app->redis->lrange("posts:$userID", 0, Yii::$app->redis->get("posts:count"));
+            $postids = Yii::$app->redis->lrange("posts:$userID", 0, -1);
 
             foreach ($postids as $postID) {
                 $post = Yii::$app->redis->hvals("post:$postID");
@@ -264,7 +264,7 @@ class RedisController extends Controller
     public function actionMyFollowing()
     {
         $userID = Yii::$app->session->get("userid");
-        $userids = Yii::$app->redis->lrange("following:$userID", 0, Yii::$app->redis->llen("following:$userID"));
+        $userids = Yii::$app->redis->lrange("following:$userID", 0, -1);
 
         foreach ($userids as $uid) {
             $user = Yii::$app->redis->hvals("user:$uid");
@@ -281,7 +281,7 @@ class RedisController extends Controller
     public function actionMyFollowers()
     {
         $userID = Yii::$app->session->get("userid");
-        $userids = Yii::$app->redis->lrange("followers:$userID", 0, Yii::$app->redis->llen("followers:$userID"));
+        $userids = Yii::$app->redis->lrange("followers:$userID", 0, -1);
 
         foreach ($userids as $uid) {
             $user = Yii::$app->redis->hvals("user:$uid");
