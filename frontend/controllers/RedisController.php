@@ -253,8 +253,9 @@ class RedisController extends Controller
 
 
         // 不能重复添加关注
-        if(!Yii::$app->redis->lindex("following:$userID", $followUserID)) {
-            Yii::$app->redis->rpush("following:$userID", $followUserID);
+        $followingNum = Yii::$app->redis->scard("following:$userID");
+        $newFollowingNum = Yii::$app->redis->sadd("following:$userID", $followUserID);
+        if($newFollowingNum > $followingNum) {
             // 当前用户的关注数+1
             Yii::$app->redis->hincrby("user:$userID", "followings", 1);
         }
