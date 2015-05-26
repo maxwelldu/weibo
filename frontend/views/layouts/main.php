@@ -26,24 +26,24 @@ AppAsset::register($this);
     <div class="wrap">
         <?php
             NavBar::begin([
-                'brandLabel' => 'My Company',
+                'brandLabel' => 'Company',
                 'brandUrl' => Yii::$app->homeUrl,
                 'options' => [
                     'class' => 'navbar-inverse navbar-fixed-top',
                 ],
             ]);
             $menuItems = [
-                ['label' => 'Home', 'url' => ['/site/index']],
-                ['label' => 'About', 'url' => ['/site/about']],
-                ['label' => 'Contact', 'url' => ['/site/contact']],
+//                ['label' => 'Home', 'url' => ['/site/index']],
+//                ['label' => 'About', 'url' => ['/site/about']],
+//                ['label' => 'Contact', 'url' => ['/site/contact']],
             ];
-            if (Yii::$app->user->isGuest) {
+            if (!Yii::$app->session->get("userid")) {
                 $menuItems[] = ['label' => 'Signup', 'url' => ['/redis/signup']];
                 $menuItems[] = ['label' => 'Login', 'url' => ['/redis/login']];
             } else {
                 $menuItems[] = [
-                    'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-                    'url' => ['/site/logout'],
+                    'label' => 'Logout (' . Yii::$app->session->get("username") . ')',
+                    'url' => ['/redis/logout'],
                     'linkOptions' => ['data-method' => 'post']
                 ];
             }
@@ -65,7 +65,7 @@ AppAsset::register($this);
 
     <footer class="footer">
         <div class="container">
-        <p class="pull-left">&copy; <?php echo Yii::$app->session->get("userid"); echo Yii::$app->session->get("username"); ?> Company <?= date('Y') ?></p>
+        <p class="pull-left">&copy; Company <?= date('Y') ?></p>
         <p class="pull-right"><?= Yii::powered() ?></p>
         </div>
     </footer>
