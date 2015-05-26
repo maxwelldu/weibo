@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-lg-5">
             <?php $form = ActiveForm::begin(['id' => 'publish-form']); ?>
-            <?= $form->field($model, 'content') ?>
+            <?= $form->textarea($model, 'content') ?>
             <div class="form-group">
                 <?= Html::submitButton('发布', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
             </div>

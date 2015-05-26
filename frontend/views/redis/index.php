@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
             foreach($users as $user) {
                 ?>
                     <span>用户名: <?php echo $user[5]; ?></span>
-                关注
+                <?= Html::a('关注', '?r=redis/follow',  ['class' => 'btn btn-primary']) ?>
                 <hr />
             <?php
             }
