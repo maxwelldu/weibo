@@ -45,10 +45,14 @@ class RedisController extends Controller
             //检查邮箱是否唯一
             if ( Yii::$app->redis->hexists("email.to.id", $email) ) {
                 echo "该邮箱已被注册";
+
+                return $this->render('signup', [
+                    'model' => $model,
+                ]);
             }
 
             $userID = Yii::$app->redis->incr("users:count");
-            Yii::$app->redis->hmset("user:{$userID}", "email", $email, "password", $password, "username", $username);
+            Yii::$app->redis->hmset("user:{$userID}", "email", $email, "password", md5($password), "username", $username);
             Yii::$app->redis->hset("email.to.id", $email, $userID);
 
             echo "注册成功";
@@ -85,12 +89,20 @@ class RedisController extends Controller
             $userID = Yii::$app->redis->hget("email.to.id", $email);
             if(!$userID) {
                 echo '用户名或密码错误!';
+
+                return $this->render('login', [
+                    'model' => $model,
+                ]);
             }
 
             $password = md5($password);
             $userpassword = Yii::$app->redis->hget("user:{$userID}", "password");
             if($password != $userpassword) {
                 echo "用户登录失败";
+
+                return $this->render('login', [
+                    'model' => $model,
+                ]);
             }
             echo "用户登录成功";
             $this->goHome();
