@@ -54,6 +54,14 @@ AppAsset::register($this);
                     'label' => '我的微博',
                     'url' => ['/redis/my'],
                 ];
+                $menuItems[] = [
+                    'label' => '关注的人',
+                    'url' => ['/redis/myfollowing'],
+                ];
+                $menuItems[] = [
+                    'label' => '我的粉丝',
+                    'url' => ['/redis/myfollows'],
+                ];
             }
             echo Nav::widget([
                 'options' => ['class' => 'navbar-nav navbar-right'],

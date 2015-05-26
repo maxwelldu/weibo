@@ -209,17 +209,56 @@ class RedisController extends Controller
         }
     }
 
+    /**
+     * 关注动作
+     * @return \yii\web\Response
+     */
     public function actionFollow()
     {
         // 1 关注 2  2 的 粉丝里面有1
         $userID = Yii::$app->session->get("userid");
         $followUserID = Yii::$app->request->get("userid");
 
-        // todo 不能重复关注, 粉丝
-        Yii::$app->redis->rpush("followers:$followUserID", $userID); //1成为2的粉丝
+        //不能关注自己
+        if ($userID == $followUserID) {
+            return $this->goHome();
+        }
 
-        // todo 不能重复添加
-        Yii::$app->redis->rpush("following:$userID", $followUserID); //将2添加到我关注的人列表当中来
+        // 不能重复关注
+        if(!Yii::$app->redis->lindex("followers:$followUserID", $userID)) {
+            Yii::$app->redis->rpush("followers:$followUserID", $userID); //1成为2的粉丝
+        }
+
+
+        // 不能重复添加
+        if(!Yii::$app->redis->lindex("following:$userID", $followUserID)) {
+            Yii::$app->redis->rpush("following:$userID", $followUserID); //将2添加到我关注的人列表当中来
+        }
         return $this->goHome();
+    }
+
+    /**
+     * 我关注的人
+     */
+    public function actionMyFollowing()
+    {
+        $userID = Yii::$app->session->get("userid");
+        $userids = Yii::$app->redis->lrange("following:$userID", 0, Yii::$app->redis->llen("following:$userID"));
+
+        foreach ($userids as $uid) {
+            $user = Yii::$app->redis->hvals("user:$uid");
+            $users[] = $user;
+        }
+        return $this->render('myfollowing', [
+            'users' => $users,
+        ]);
+    }
+
+    /**
+     * 我的粉丝
+     */
+    public function actionMyFollows()
+    {
+
     }
 }
