@@ -46,6 +46,9 @@ class RedisController extends Controller
             $email = $SignupForm['email'];
             $password = $SignupForm['password'];
             $username = $SignupForm['username'];
+            $created_at = time();
+            $fans = 0;
+            $posts = 0;
 
             //检查邮箱是否唯一
             if ( Yii::$app->redis->hexists("email.to.id", $email) ) {
@@ -57,7 +60,7 @@ class RedisController extends Controller
             }
 
             $userID = Yii::$app->redis->incr("users:count");
-            Yii::$app->redis->hmset("user:{$userID}", "email", $email, "password", md5($password), "username", $username);
+            Yii::$app->redis->hmset("user:{$userID}", "email", $email, "password", md5($password), "username", $username, "fans", $fans, "posts", $posts, "created_at", $created_at);
             Yii::$app->redis->hset("email.to.id", $email, $userID);
 
             Yii::$app->session->set("userid", $userID);
