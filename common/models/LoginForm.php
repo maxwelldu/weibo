@@ -73,4 +73,15 @@ class LoginForm extends Model
 
         return $this->_user;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'email' => '邮 箱',
+            'password' => '密码',
+        ];
+    }
 }
