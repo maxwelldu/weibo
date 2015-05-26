@@ -28,7 +28,7 @@ class RedisController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'signup', 'logout', 'login', 'index', 'follow', 'my-following', 'my-followers'
+                    'signup', 'logout', 'login', 'index', 'follow', 'my-following', 'my-followers', 'space'
                 ],
             ],
         ];
@@ -290,6 +290,49 @@ class RedisController extends Controller
         }
         return $this->render('myfollowers', [
             'users' => $users,
+        ]);
+    }
+
+    public function actionSpace()
+    {
+        $userID = Yii::$app->session->get("userid");
+
+        // 我的信息
+        $user = Yii::$app->redis->hget("user:$userID");
+
+        // 我发布的微博
+        $posts = array();
+        if($userID>0) {
+            $postids = Yii::$app->redis->lrange("posts:$userID", 0, -1);
+
+            foreach ($postids as $postID) {
+                $post = Yii::$app->redis->hvals("post:$postID");
+                $posts[] = $post;
+            }
+        }
+
+        // 我关注的人
+        $userids = Yii::$app->redis->lrange("following:$userID", 0, -1);
+
+        $followingusers = array();
+        foreach ($userids as $uid) {
+            $user = Yii::$app->redis->hvals("user:$uid");
+            $followingusers[] = $user;
+        }
+
+        // 我的粉丝
+        $userids = Yii::$app->redis->lrange("followers:$userID", 0, -1);
+
+        $followersusers = array();
+        foreach ($userids as $uid) {
+            $user = Yii::$app->redis->hvals("user:$uid");
+            $followersusers[] = $user;
+        }
+        return $this->render('space', [
+            'user' => $user,
+            'posts' => $posts,
+            'followingusers' => $followingusers,
+            'followersusers' => $followersusers,
         ]);
     }
 }
