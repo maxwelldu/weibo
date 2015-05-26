@@ -317,7 +317,7 @@ class RedisController extends Controller
         }
 
         // 我关注的人
-        $userids = Yii::$app->redis->lrange("following:$userID", 0, -1);
+        $userids = Yii::$app->redis->smembers("following:$userID");
         $followingusers = array();
         foreach ($userids as $uid) {
             $user = Yii::$app->redis->hvals("user:$uid");
@@ -325,12 +325,13 @@ class RedisController extends Controller
         }
 
         // 我的粉丝
-        $userids = Yii::$app->redis->lrange("followers:$userID", 0, -1);
+        $userids = Yii::$app->redis->smembers("followers:$userID");
         $followersusers = array();
         foreach ($userids as $uid) {
             $user = Yii::$app->redis->hvals("user:$uid");
             $followersusers[] = $user;
         }
+
         return $this->render('space', [
             'userinfo' => $userinfo,
             'posts' => $posts,
