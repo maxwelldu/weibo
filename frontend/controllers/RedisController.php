@@ -28,7 +28,7 @@ class RedisController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'signup', 'logout', 'login', 'index'
+                    'signup', 'logout', 'login', 'index', 'follow',
                 ],
             ],
         ];
@@ -220,5 +220,6 @@ class RedisController extends Controller
 
         // todo 不能重复添加
         Yii::$app->redis->rpush("following:$userID", $followUserID); //将2添加到我关注的人列表当中来
+        return $this->goHome();
     }
 }
