@@ -12,7 +12,7 @@ use yii\bootstrap\ActiveForm;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model \frontend\models\SignupForm */
 
-$this->title = '我关注的人';
+$this->title = '我的粉丝';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-signup">
@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="row">
         <div class="col-lg-12">
-            <h3>关注的人</h3>
+            <h3>我的粉丝</h3>
             <?php
             foreach($users as $user) {
                 ?>
