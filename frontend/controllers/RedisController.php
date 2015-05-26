@@ -105,6 +105,9 @@ class RedisController extends Controller
                 ]);
             }
             echo "用户登录成功";
+            $username = Yii::$app->redis->hget("user:$userID", "username");
+            Yii::$app->session->set("userid", $userID);
+            Yii::$app->session->set("username", $username);
             $this->goHome();
         } else {
             return $this->render('login', [
