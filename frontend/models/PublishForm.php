@@ -22,4 +22,13 @@ class PublishForm extends Model
         ];
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'content' => '',
+        ];
+    }
 }
