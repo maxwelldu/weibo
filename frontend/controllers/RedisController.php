@@ -133,7 +133,7 @@ class RedisController extends Controller
         ]);
     }
 
-    public function actionPublis()
+    public function actionPublish()
     {
         $postID = Yii::$app->redis->incr("posts:count");
         $uid = Yii::$app->session->get("userid");

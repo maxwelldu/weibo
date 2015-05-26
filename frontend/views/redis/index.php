@@ -22,7 +22,13 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-lg-5">
             <?php
                 foreach($posts as $post) {
-                    var_dump($post);
+            ?>
+            <div class="row">
+                <span>作者: <?php echo $post[1]; ?></span>
+                <span>发布时间: <?php echo date('y-m-d H:i:s', $post[2]); ?></span>
+                <span>微博内容: <?php echo $post[3]; ?></span>
+            </div>
+            <?php
                 }
             ?>
         </div>
