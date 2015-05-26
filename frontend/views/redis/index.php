@@ -34,10 +34,11 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-lg-4">
             <h3>所有用户</h3>
             <?php
+            $i = 1;
             foreach($users as $user) {
                 ?>
                     <span>用户名: <?php echo $user[5]; ?></span>
-                <?= Html::a('关注', '?r=redis/follow?userid='.$user[7],  ['class' => 'btn btn-primary']) ?>
+                <?= Html::a('关注', '?r=redis/follow?userid='.$i++,  ['class' => 'btn btn-primary']) ?>
                 <hr />
             <?php
             }

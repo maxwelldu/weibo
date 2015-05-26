@@ -154,7 +154,6 @@ class RedisController extends Controller
         $usercount = Yii::$app->redis->get("users:count");
         for($i=1; $i<=$usercount; $i++) {
             $user = Yii::$app->redis->hgetall("user:$i");
-            $user['id'] = $i;
             $users[] = $user;
         }
 
