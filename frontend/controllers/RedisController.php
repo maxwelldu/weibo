@@ -47,6 +47,7 @@ class RedisController extends Controller
             $password = $SignupForm['password'];
             $username = $SignupForm['username'];
             $created_at = time();
+            $followings = 0;
             $fans = 0;
             $posts = 0;
 
@@ -60,7 +61,7 @@ class RedisController extends Controller
             }
 
             $userID = Yii::$app->redis->incr("users:count");
-            Yii::$app->redis->hmset("user:{$userID}", "email", $email, "password", md5($password), "username", $username, "fans", $fans, "posts", $posts, "created_at", $created_at);
+            Yii::$app->redis->hmset("user:{$userID}", "email", $email, "password", md5($password), "username", $username, "followings", $followings, "fans", $fans, "posts", $posts, "created_at", $created_at);
             Yii::$app->redis->hset("email.to.id", $email, $userID);
 
             Yii::$app->session->set("userid", $userID);
@@ -221,11 +222,16 @@ class RedisController extends Controller
 
     /**
      * 关注动作
+     *
+     * ~~~
+     * {
+     *   'userid' <被关注的用户id>
+     * }
+     * ~~~
      * @return \yii\web\Response
      */
     public function actionFollow()
     {
-        // 1 关注 2  2 的 粉丝里面有1
         $userID = Yii::$app->session->get("userid");
         $followUserID = Yii::$app->request->get("userid");
 
@@ -234,15 +240,19 @@ class RedisController extends Controller
             return $this->goHome();
         }
 
-        // 不能重复关注
+        // 不能重复添加粉丝
         if(!Yii::$app->redis->lindex("followers:$followUserID", $userID)) {
-            Yii::$app->redis->rpush("followers:$followUserID", $userID); //1成为2的粉丝
+            Yii::$app->redis->rpush("followers:$followUserID", $userID);
+            // 被关注的用户粉丝数+1
+            Yii::$app->redis->hincrby("user:$followUserID", "fans", 1);
         }
 
 
-        // 不能重复添加
+        // 不能重复添加关注
         if(!Yii::$app->redis->lindex("following:$userID", $followUserID)) {
-            Yii::$app->redis->rpush("following:$userID", $followUserID); //将2添加到我关注的人列表当中来
+            Yii::$app->redis->rpush("following:$userID", $followUserID);
+            // 当前用户的关注数+1
+            Yii::$app->redis->hincrby("user:$userID", "followings", 1);
         }
         return $this->goHome();
     }
