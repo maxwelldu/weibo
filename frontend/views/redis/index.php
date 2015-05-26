@@ -23,32 +23,36 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php
                 foreach($posts as $post) {
             ?>
+                    <div class="well">
                 <span>作者: <?php echo $post[1]; ?></span>
                 <span>发布时间: <?php echo date('y-m-d H:i:s', $post[2]); ?></span>
                 <span>微博内容: <?php echo $post[3]; ?></span>
-            <hr />
+                    </div>
             <?php
                 }
             ?>
         </div>
         <div class="col-lg-4">
             <h3>所有用户</h3>
+            <ul class="list-group">
             <?php
             $i = 1;
             foreach($users as $user) {
             ?>
-                <span>用户名: <?php echo $user[5]; ?></span>
-                <?php
-                if(Yii::$app->session->get('userid')>0) :
-                ?>
-                 <?= Html::a('关注', '?r=redis/follow&userid='.$i++,  ['class' => 'btn btn-primary']) ?>
-                <?php
-                endif;
-                ?>
-                <hr />
+                <li class="list-group-item list-group-item-info">
+                    <span>用户名: <?php echo $user[5]; ?></span>
+                    <?php
+                    if(Yii::$app->session->get('userid')>0) :
+                    ?>
+                     <?= Html::a('关注', '?r=redis/follow&userid='.$i++,  ['class' => 'btn btn-primary']) ?>
+                    <?php
+                    endif;
+                    ?>
+                </li>
             <?php
             }
             ?>
+            </ul>
         </div>
 
     </div>
