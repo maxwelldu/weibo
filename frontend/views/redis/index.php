@@ -32,11 +32,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ?>
         </div>
         <div class="col-lg-4">
+            <h3>所有用户</h3>
             <?php
-            var_dump($users);
             foreach($users as $user) {
                 ?>
-                    <span>用户名: <?php echo $user[1]; ?></span>
+                    <span>用户名: <?php echo $user[5]; ?></span>
+                关注
                 <hr />
             <?php
             }

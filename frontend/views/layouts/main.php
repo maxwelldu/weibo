@@ -50,6 +50,10 @@ AppAsset::register($this);
                     'label' => '发布微博',
                     'url' => ['/redis/publish'],
                 ];
+                $menuItems[] = [
+                    'label' => '我的微博',
+                    'url' => ['/redis/my'],
+                ];
             }
             echo Nav::widget([
                 'options' => ['class' => 'navbar-nav navbar-right'],

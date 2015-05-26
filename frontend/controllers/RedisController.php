@@ -141,7 +141,7 @@ class RedisController extends Controller
         $userID = Yii::$app->session->get("userid");
         $posts = array();
 
-        if($userID>0) {
+        if ($userID>0) {
             $postids = Yii::$app->redis->lrange("posts:$userID", 0, Yii::$app->redis->get("posts:count"));
 
             foreach ($postids as $postID) {
@@ -150,10 +150,10 @@ class RedisController extends Controller
             }
         }
 
-        $userids = Yii::$app->redis->lrange("user:$userID", 0, Yii::$app->redis->get("users:count"));
-
-        foreach ($userids as $userID) {
-            $user = Yii::$app->redis->hvals("user:$userID");
+        $users = array();
+        $usercount = Yii::$app->redis->get("users:count");
+        for($i=1; $i<=$usercount; $i++) {
+            $user = Yii::$app->redis->hgetall("user:$i");
             $users[] = $user;
         }
 
