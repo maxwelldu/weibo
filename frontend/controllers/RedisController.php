@@ -26,7 +26,7 @@ class RedisController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'signup',
+                    'signup', 'logout', 'login', 'index'
                 ],
             ],
         ];
@@ -54,11 +54,6 @@ class RedisController extends Controller
             Yii::$app->session->set("userid", $userID);
             Yii::$app->session->set("username", $username);
             return $this->goHome();
-//            if ($user = $model->signup()) {
-//                if (Yii::$app->getUser()->login($user)) {
-//                    return $this->goHome();
-//                }
-//            }
         }
 
         return $this->render('signup', [
@@ -71,6 +66,38 @@ class RedisController extends Controller
         Yii::$app->getSession()->destroy();
 
         return $this->goHome();
+    }
+
+
+    public function actionLogin()
+    {
+        if (Yii::$app->session->get("userid")>0) {
+            return $this->goHome();
+        }
+
+        $model = new LoginForm();
+        if (Yii::$app->request->isPost) {
+            //登录, 获取邮箱, 去查id
+            $LoginForm = Yii::$app->request->post("LoginForm");
+            $email = $LoginForm['email'];
+            $password = $LoginForm['password'];
+            $userID = Yii::$app->redis->hget("email.to.id", $email);
+            if(!$userID) {
+                echo '用户名或密码错误!';
+            }
+
+            $password = md5($password);
+            $userpassword = Yii::$app->redis->hget("user:{$userID}", "password");
+            if($password != $userpassword) {
+                echo "用户登录失败";
+            }
+            echo "用户登录成功";
+            $this->goHome();
+        } else {
+            return $this->render('login', [
+                'model' => $model,
+            ]);
+        }
     }
 
     public function actionIndex()
