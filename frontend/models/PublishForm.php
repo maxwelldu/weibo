@@ -18,7 +18,7 @@ class PublishForm extends Model
     {
         return [
             ['content', 'filter', 'filter' => 'trim'],
-            ['content', 'required'],
+            ['content', 'required', 'message' => '微博内容不能为空'],
         ];
     }
 
