@@ -129,7 +129,7 @@ class RedisController extends Controller
         }
 
         return $this->render('index', [
-            'post' => $posts
+            'posts' => $posts
         ]);
     }
 
