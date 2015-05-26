@@ -44,7 +44,7 @@ class RedisController extends Controller
 
             //检查邮箱是否唯一
             if ( Yii::$app->redis->hexists("email.to.id", $email) ) {
-                echo "该邮箱已被注册";
+                Yii::$app->session->setFlash("failure", "该邮箱已被注册");
 
                 return $this->render('signup', [
                     'model' => $model,
@@ -55,7 +55,6 @@ class RedisController extends Controller
             Yii::$app->redis->hmset("user:{$userID}", "email", $email, "password", md5($password), "username", $username);
             Yii::$app->redis->hset("email.to.id", $email, $userID);
 
-            echo "注册成功";
             Yii::$app->session->set("userid", $userID);
             Yii::$app->session->set("username", $username);
             return $this->goHome();
@@ -88,7 +87,7 @@ class RedisController extends Controller
             $password = $LoginForm['password'];
             $userID = Yii::$app->redis->hget("email.to.id", $email);
             if(!$userID) {
-                echo '用户名或密码错误!';
+                Yii::$app->session->setFlash("failure", "用户或密码错误");
 
                 return $this->render('login', [
                     'model' => $model,
@@ -98,13 +97,12 @@ class RedisController extends Controller
             $password = md5($password);
             $userpassword = Yii::$app->redis->hget("user:{$userID}", "password");
             if($password != $userpassword) {
-                echo "用户登录失败";
-
+                Yii::$app->session->setFlash("failure", "用户登录失败");
                 return $this->render('login', [
                     'model' => $model,
                 ]);
             }
-            echo "用户登录成功";
+
             $username = Yii::$app->redis->hget("user:$userID", "username");
             Yii::$app->session->set("userid", $userID);
             Yii::$app->session->set("username", $username);
