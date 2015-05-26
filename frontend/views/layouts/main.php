@@ -38,8 +38,8 @@ AppAsset::register($this);
 //                ['label' => 'Contact', 'url' => ['/site/contact']],
             ];
             if (Yii::$app->session->get("userid")<=0) {
-                $menuItems[] = ['label' => 'Signup', 'url' => ['/redis/signup']];
-                $menuItems[] = ['label' => 'Login', 'url' => ['/redis/login']];
+                $menuItems[] = ['label' => '注册', 'url' => ['/redis/signup']];
+                $menuItems[] = ['label' => '登录', 'url' => ['/redis/login']];
             } else {
                 $menuItems[] = [
                     'label' => 'Logout (' . Yii::$app->session->get("username") . ')',

@@ -1,6 +1,6 @@
 <?php
 /* @var $this yii\web\View */
-$this->title = 'My Yii Application';
+$this->title = '第一个微博程序';
 ?>
 <div class="site-index">
 

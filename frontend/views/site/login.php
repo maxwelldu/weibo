@@ -6,7 +6,7 @@ use yii\bootstrap\ActiveForm;
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model \common\models\LoginForm */
 
-$this->title = 'Login';
+$this->title = '登录微博~';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="site-login">
