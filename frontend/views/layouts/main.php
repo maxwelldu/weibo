@@ -54,6 +54,7 @@ AppAsset::register($this);
                     'label' => '我的空间',
                     'url' => ['/redis/space'],
                 ];
+
             }
             echo Nav::widget([
                 'options' => ['class' => 'navbar-nav navbar-right'],
