@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php
     if(Yii::$app->session->getFlash('failure')) {
-        echo "<div class='alert alert-error'>".Yii::$app->session->getFlash('failure')."</div>";
+        echo "<div class='alert alert-danger'>".Yii::$app->session->getFlash('failure')."</div>";
     }
     ?>
     <div class="row">
