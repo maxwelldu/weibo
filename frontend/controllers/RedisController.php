@@ -146,11 +146,17 @@ class RedisController extends Controller
         $posts = array();
 
         if ($userID>0) {
-            $postids = Yii::$app->redis->lrange("posts:$userID", 0, -1);
-
-            foreach ($postids as $postID) {
-                $post = Yii::$app->redis->hvals("post:$postID");
-                $posts[] = $post;
+            // 获取关注的用户列表
+            $followings = Yii::$app->redis->smembers("following:$userID");
+            // 获取用户列表的所有微博
+            foreach($followings as $uid) {
+                // 获取单个用户的微博id列表
+                $postids = Yii::$app->redis->lrange("posts:$uid", 0, -1);
+                // 根据微博id获取微博
+                foreach ($postids as $postID) {
+                    $post = Yii::$app->redis->hvals("post:$postID");
+                    $posts[] = $post;
+                }
             }
         } else {
             for ($i=1; $i<Yii::$app->redis->get("posts:count"); $i++) {
