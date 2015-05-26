@@ -212,6 +212,7 @@ class RedisController extends Controller
             $content = $PublishForm['content'];
             Yii::$app->redis->hmset("post:{$postID}", "uid", $uid, "username", $username, "created_at", $created_at, "content", $content);
             Yii::$app->redis->rpush("posts:$uid", $postID);
+            Yii::$app->redis->hincrby("user:$uid", "posts", 1);
             return $this->goHome();
         } else {
             return $this->render('publish', [
