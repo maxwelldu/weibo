@@ -8,6 +8,7 @@
 
 namespace frontend\controllers;
 
+use frontend\models\PublishForm;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -33,6 +34,10 @@ class RedisController extends Controller
         ];
     }
 
+    /**
+     * 用户注册
+     * @return string|\yii\web\Response
+     */
     public function actionSignup()
     {
         $model = new SignupForm();
@@ -65,6 +70,10 @@ class RedisController extends Controller
         ]);
     }
 
+    /**
+     * 用户退出
+     * @return \yii\web\Response
+     */
     public function actionLogout()
     {
         Yii::$app->session->set("userid", 0);
@@ -72,7 +81,10 @@ class RedisController extends Controller
         return $this->goHome();
     }
 
-
+    /**
+     * 用户登录
+     * @return string|\yii\web\Response
+     */
     public function actionLogin()
     {
         if (Yii::$app->session->get("userid")>0) {
@@ -114,6 +126,10 @@ class RedisController extends Controller
         }
     }
 
+    /**
+     * 首页, 全部微博
+     * @return string
+     */
     public function actionIndex()
     {
         $userID = Yii::$app->session->get("userid");
@@ -133,15 +149,49 @@ class RedisController extends Controller
         ]);
     }
 
+    /**
+     * 我的微博
+     * @return string
+     */
+    public function actionMy()
+    {
+        $userID = Yii::$app->session->get("userid");
+        $posts = array();
+
+        if($userID>0) {
+            $postids = Yii::$app->redis->lrange("posts:$userID", 0, Yii::$app->redis->get("posts:count"));
+
+            foreach ($postids as $postID) {
+                $post = Yii::$app->redis->hvals("post:$postID");
+                $posts[] = $post;
+            }
+        }
+
+        return $this->render('my', [
+            'posts' => $posts
+        ]);
+    }
+
+    /**
+     * 发布微博
+     */
     public function actionPublish()
     {
-        $postID = Yii::$app->redis->incr("posts:count");
-        $uid = Yii::$app->session->get("userid");
-        $username = Yii::$app->redis->hget("user:$uid", "username");
-        $created_at = time();
-        $content = "test content";
-        Yii::$app->redis->hmset("post:{$postID}", "uid", $uid, "username", $username, "created_at", $created_at, "content", $content);
-        Yii::$app->redis->rpush("posts:$uid", $postID);
-        echo "微博成功";
+        $model = new PublishForm();
+        if (Yii::$app->request->isPost) {
+            $postID = Yii::$app->redis->incr("posts:count");
+            $uid = Yii::$app->session->get("userid");
+            $username = Yii::$app->redis->hget("user:$uid", "username");
+            $created_at = time();
+            $PublishForm = Yii::$app->request->post("PublishForm");
+            $content = $PublishForm['content'];
+            Yii::$app->redis->hmset("post:{$postID}", "uid", $uid, "username", $username, "created_at", $created_at, "content", $content);
+            Yii::$app->redis->rpush("posts:$uid", $postID);
+            return $this->goHome();
+        } else {
+            return $this->render('publish', [
+                'model' => $model,
+            ]);
+        }
     }
 }

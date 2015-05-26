@@ -46,6 +46,10 @@ AppAsset::register($this);
                     'url' => ['/redis/logout'],
                     'linkOptions' => ['data-method' => 'post']
                 ];
+                $menuItems[] = [
+                    'label' => '发布微博',
+                    'url' => ['/redis/publish'],
+                ];
             }
             echo Nav::widget([
                 'options' => ['class' => 'navbar-nav navbar-right'],
