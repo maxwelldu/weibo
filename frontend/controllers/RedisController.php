@@ -35,20 +35,15 @@ class RedisController extends Controller
     public function actionSignup()
     {
         $model = new SignupForm();
-        if (Yii::$ap->request->isPost) {
-
-            $email = Yii::$app->request->post('email', null);
-            $password = Yii::$app->request->post('password', null);
-            $username = Yii::$app->request->post('username', null);
-            if (in_array(null, [$email, $password, $username])) {
-                echo "参数不正确";
-                exit;
-            }
+        if (Yii::$app->request->isPost) {
+            $SignupForm = Yii::$app->request->post("SignupForm");
+            $email = $SignupForm['email'];
+            $password = $SignupForm['password'];
+            $username = $SignupForm['username'];
 
             //检查邮箱是否唯一
             if ( Yii::$app->redis->hexists("email.to.id", $email) ) {
                 echo "该邮箱已被注册";
-                exit;
             }
 
             $userID = Yii::$app->redis->incr("users:count");
@@ -56,7 +51,9 @@ class RedisController extends Controller
             Yii::$app->redis->hset("email.to.id", $email, $userID);
 
             echo "注册成功";
-            exit;
+            Yii::$app->session->set("userid", $userID);
+            Yii::$app->session->set("username", $username);
+            return $this->render('index');
 //            if ($user = $model->signup()) {
 //                if (Yii::$app->getUser()->login($user)) {
 //                    return $this->goHome();
@@ -67,5 +64,10 @@ class RedisController extends Controller
         return $this->render('signup', [
             'model' => $model,
         ]);
+    }
+
+    public function actionIndex()
+    {
+        return $this->render('index');
     }
 }
