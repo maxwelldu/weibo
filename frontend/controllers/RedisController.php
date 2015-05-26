@@ -179,29 +179,6 @@ class RedisController extends Controller
     }
 
     /**
-     * 我的微博
-     * @return string
-     */
-    public function actionMy()
-    {
-        $userID = Yii::$app->session->get("userid");
-        $posts = array();
-
-        if($userID>0) {
-            $postids = Yii::$app->redis->lrange("posts:$userID", 0, -1);
-
-            foreach ($postids as $postID) {
-                $post = Yii::$app->redis->hvals("post:$postID");
-                $posts[] = $post;
-            }
-        }
-
-        return $this->render('my', [
-            'posts' => $posts
-        ]);
-    }
-
-    /**
      * 发布微博
      */
     public function actionPublish()
@@ -268,40 +245,6 @@ class RedisController extends Controller
         return $this->goHome();
     }
 
-    /**
-     * 我关注的人
-     */
-    public function actionMyFollowing()
-    {
-        $userID = Yii::$app->session->get("userid");
-        $userids = Yii::$app->redis->lrange("following:$userID", 0, -1);
-
-        foreach ($userids as $uid) {
-            $user = Yii::$app->redis->hvals("user:$uid");
-            $users[] = $user;
-        }
-        return $this->render('myfollowing', [
-            'users' => $users,
-        ]);
-    }
-
-    /**
-     * 我的粉丝
-     */
-    public function actionMyFollowers()
-    {
-        $userID = Yii::$app->session->get("userid");
-        $userids = Yii::$app->redis->lrange("followers:$userID", 0, -1);
-
-        $users = array();
-        foreach ($userids as $uid) {
-            $user = Yii::$app->redis->hvals("user:$uid");
-            $users[] = $user;
-        }
-        return $this->render('myfollowers', [
-            'users' => $users,
-        ]);
-    }
 
     /**
      * 我的页面
