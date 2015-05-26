@@ -35,11 +35,15 @@ class RedisController extends Controller
     public function actionSignup()
     {
         $model = new SignupForm();
-        if ($model->load(Yii::$app->request->post())) {
-            $userID = Yii::$app->redis->incr("users:count");
-            $email = Yii::$app->request->post['email'];
-            $password = md5(Yii::$app->request->post['password']);
-            $username = Yii::$app->request->post['username'];
+        if (Yii::$ap->request->isPost) {
+
+            $email = Yii::$app->request->post('email', null);
+            $password = Yii::$app->request->post('password', null);
+            $username = Yii::$app->request->post('username', null);
+            if (in_array(null, [$email, $password, $username])) {
+                echo "参数不正确";
+                exit;
+            }
 
             //检查邮箱是否唯一
             if ( Yii::$app->redis->hexists("email.to.id", $email) ) {
@@ -47,6 +51,7 @@ class RedisController extends Controller
                 exit;
             }
 
+            $userID = Yii::$app->redis->incr("users:count");
             Yii::$app->redis->hmset("user:{$userID}", "email", $email, "password", $password, "username", $username);
             Yii::$app->redis->hset("email.to.id", $email, $userID);
 
