@@ -18,7 +18,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="site-signup">
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Please fill out the following fields to signup:</p>
     <?php
     if(Yii::$app->session->getFlash('failure')) {
         echo "<div class='alert alert-error'>".Yii::$app->session->getFlash('failure')."</div>";
