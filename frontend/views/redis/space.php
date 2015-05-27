@@ -18,6 +18,20 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="site-signup">
     <h1><?= Html::encode($this->title) ?></h1>
 
+    <div class="row well">
+        用户信息
+        <?php
+        echo "用户名";
+        echo $userinfo[2]; //用户名
+        echo "关注数";
+        echo $userinfo[3]; //关注数
+        echo "粉丝数";
+        echo $userinfo[4]; //粉丝数
+        echo "微博数";
+        echo $userinfo[5]; //微博数
+        ?>
+    </div>
+
     <div class="row">
         <div class="col-lg-12">
             <?php
