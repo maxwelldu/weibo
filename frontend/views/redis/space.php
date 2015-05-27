@@ -59,7 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 foreach($followingusers as $user) {
                     ?>
                     <li class="list-group-item list-group-item-info">
-                        <span class="glyphicon glyphicon-user"> <?php echo $user[5]; ?></span>
+                        <span class="glyphicon glyphicon-user"> <?php echo $user[2]; ?></span>
                         <?php
                         if(Yii::$app->session->get('userid')>0) :
                             ?>
@@ -81,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 foreach($followersusers as $user) {
                     ?>
                     <li class="list-group-item list-group-item-info">
-                        <span class="glyphicon glyphicon-user"> <?php echo $user[5]; ?></span>
+                        <span class="glyphicon glyphicon-user"> <?php echo $user[2]; ?></span>
                         <?php
                         if(Yii::$app->session->get('userid')>0) :
                             ?>
