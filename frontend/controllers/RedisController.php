@@ -75,17 +75,6 @@ class RedisController extends Controller
     }
 
     /**
-     * 用户退出
-     * @return \yii\web\Response
-     */
-    public function actionLogout()
-    {
-        Yii::$app->session->set("userid", 0);
-
-        return $this->goHome();
-    }
-
-    /**
      * 用户登录
      * @return string|\yii\web\Response
      */
@@ -128,6 +117,17 @@ class RedisController extends Controller
                 'model' => $model,
             ]);
         }
+    }
+
+    /**
+     * 用户退出
+     * @return \yii\web\Response
+     */
+    public function actionLogout()
+    {
+        Yii::$app->session->set("userid", 0);
+
+        return $this->goHome();
     }
 
     /**
@@ -179,6 +179,49 @@ class RedisController extends Controller
     }
 
     /**
+     * 我的页面
+     * @return string
+     */
+    public function actionSpace()
+    {
+        $userID = Yii::$app->session->get("userid");
+
+        // 我的信息
+        $userinfo = Yii::$app->redis->hvals("user:$userID");
+
+        // 我发布的微博
+        $postids = Yii::$app->redis->lrange("posts:$userID", 0, -1);
+        $posts = array();
+        foreach ($postids as $postID) {
+            $post = Yii::$app->redis->hvals("post:$postID");
+            $posts[] = $post;
+        }
+
+        // 我关注的人
+        $userids = Yii::$app->redis->smembers("following:$userID");
+        $followingusers = array();
+        foreach ($userids as $uid) {
+            $user = Yii::$app->redis->hvals("user:$uid");
+            $followingusers[] = $user;
+        }
+
+        // 我的粉丝
+        $userids = Yii::$app->redis->smembers("followers:$userID");
+        $followersusers = array();
+        foreach ($userids as $uid) {
+            $user = Yii::$app->redis->hvals("user:$uid");
+            $followersusers[] = $user;
+        }
+
+        return $this->render('space', [
+            'userinfo' => $userinfo,
+            'posts' => $posts,
+            'followingusers' => $followingusers,
+            'followersusers' => $followersusers,
+        ]);
+    }
+
+    /**
      * 发布微博
      */
     public function actionPublish()
@@ -204,6 +247,7 @@ class RedisController extends Controller
 
     /**
      * 关注动作
+     * 以后修改为ajax请求
      *
      * ~~~
      * {
@@ -247,6 +291,7 @@ class RedisController extends Controller
 
     /**
      * 取消关注动作
+     * todo 以后修改为ajax请求
      */
     public function actionDelfollow()
     {
@@ -257,7 +302,7 @@ class RedisController extends Controller
 
         $followUserID = Yii::$app->request->get("userid");
 
-        // 不能重复添加粉丝, 这里使用集合, 如果存在则会忽略, 不存在则会新建
+        // 删除粉丝
         if ( Yii::$app->redis->srem("followers:$followUserID", $userID) == 1 ) {
             // 被关注的用户粉丝数-1
             Yii::$app->redis->hincrby("user:$followUserID", "fans", -1);
@@ -269,51 +314,9 @@ class RedisController extends Controller
             // 当前用户的关注数-1
             Yii::$app->redis->hincrby("user:$userID", "followings", -1);
         }
-        return $this->goBack();
+        $this->goBack();
     }
 
 
-    /**
-     * 我的页面
-     * @return string
-     */
-    public function actionSpace()
-    {
-        $userID = Yii::$app->session->get("userid");
 
-        // 我的信息
-        $userinfo = Yii::$app->redis->hvals("user:$userID");
-
-        // 我发布的微博
-        $postids = Yii::$app->redis->lrange("posts:$userID", 0, -1);
-        $posts = array();
-        foreach ($postids as $postID) {
-            $post = Yii::$app->redis->hvals("post:$postID");
-            $posts[] = $post;
-        }
-
-        // 我关注的人
-        $userids = Yii::$app->redis->smembers("following:$userID");
-        $followingusers = array();
-        foreach ($userids as $uid) {
-            $user = Yii::$app->redis->hvals("user:$uid");
-            $followingusers[] = $user;
-        }
-
-        // 我的粉丝
-        $userids = Yii::$app->redis->smembers("followers:$userID");
-        $followersusers = array();
-        foreach ($userids as $uid) {
-            $user = Yii::$app->redis->hvals("user:$uid");
-            $followersusers[] = $user;
-        }
-
-        return $this->render('space', [
-            'userinfo' => $userinfo,
-            'posts' => $posts,
-            'followingusers' => $followingusers,
-            'followersusers' => $followersusers,
-        ]);
-
-    }
 }

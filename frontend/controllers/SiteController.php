@@ -187,23 +187,6 @@ class SiteController extends Controller
     }
 
     /**
-     * 测试用户注册
-     */
-    public function actionRedisUserRegister()
-    {
-        // 批量注册10个用户, todo 先检查邮箱是否唯一
-        for($i=0; $i<10; $i++) {
-
-            $userID = Yii::$app->redis->incr("users:count");
-            $email = "dcj3sjt@126.com".$userID;
-            Yii::$app->redis->hmset("user:{$userID}", "email", $email, "password", md5("adminadmin"), "nickname", "maxwelldu".$userID);
-            Yii::$app->redis->hset("email.to.id", $email, $userID);
-
-            echo "注册成功";
-        }
-    }
-
-    /**
      * 清空所有的数据
      */
     public function actionRedisClear()
@@ -211,101 +194,6 @@ class SiteController extends Controller
         Yii::$app->redis->flushall();
         echo '已经清空所有数据';
     }
-
-    /**
-     * 用户登录
-     */
-    public function actionRedisUserLogin()
-    {
-        //登录, 获取邮箱, 去查id
-        $email = "dcj3sjt@126.com1";
-        $userID = Yii::$app->redis->hget("email.to.id", $email);
-        if(!$userID) {
-            echo '用户名或密码错误!';
-            exit;
-        }
-
-        $password = md5("adminadmin");
-        $userpassword = Yii::$app->redis->hget("user:{$userID}", "password");
-        if($password != $userpassword) {
-            echo "用户登录失败";
-            exit;
-        }
-        echo "用户登录成功";
-    }
-
-    /**
-     * 发布微博
-     */
-    public function actionRedisPublishPost()
-    {
-        // 批量发布10条微博
-        for($i=0; $i<10; $i++) {
-            $postID = Yii::$app->redis->incr("posts:count");
-            $uid = $i+1;
-            $username = "test".$i;
-            $created_at = time();
-            $content = "contnet ".$i;
-            Yii::$app->redis->hmset("post:{$postID}", "uid", $uid, "username", $username, "created_at", $created_at, "content", $content);
-            Yii::$app->redis->rpush("posts:$uid", $postID);
-            echo "微博成功";
-        }
-    }
-
-    /**
-     * 查询userid 为 1的人的微博列表
-     */
-    public function actionRedisMyWeiboList()
-    {
-        $userID = 1;
-        $posts = Yii::$app->redis->lrange("posts:$userID", 0, Yii::$app->redis->get("posts:count"));
-        foreach($posts as $postID) {
-            $post = Yii::$app->redis->hvals("post:$postID");
-            var_dump($post);
-        }
-    }
-
-    /**
-     * 所有的微博
-     */
-    public function actionRedisWeibos()
-    {
-        /* todo 代码是错误的
-        $posts = Yii::$app->redis->hgetall("post:*");
-        foreach($posts as $post) {
-            var_dump($post);
-        }
-        */
-    }
-
-    /**
-     * 关注人
-     */
-    public function actionRedisFollow()
-    {
-        // 2, 3 关注  1
-        // 1 的粉丝有 2和3, 2关注的人有1, 3关注的人有1
-        $uid = 1;
-        $uid2 = 2;
-        $uid3 = 3;
-        // todo 不能重复关注
-        Yii::$app->redis->rpush("followers:$uid", $uid2); //将2添加为1的粉丝
-        Yii::$app->redis->rpush("followers:$uid", $uid3); //将3添加为1的粉丝
-
-        // todo 不能重复添加
-        Yii::$app->redis->rpush("following:$uid", $uid2); //2关注的有1
-        Yii::$app->redis->rpush("following:$uid", $uid3); //3关注的有1
-    }
-
-    /**
-     * 我关注的人的微博
-     */
-    public function actionRedisFollowWeibos()
-    {
-        //todo
-    }
-
-
 
     public function actionTestRedis()
     {
