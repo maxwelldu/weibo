@@ -159,7 +159,7 @@ class RedisController extends Controller
                 }
             }
         } else {
-            for ($i=1; $i<Yii::$app->redis->get("posts:count"); $i++) {
+            for ($i=1; $i <= Yii::$app->redis->get("posts:count"); $i++) {
                 $post = Yii::$app->redis->hvals("post:$i");
                 $posts[] = $post;
             }
