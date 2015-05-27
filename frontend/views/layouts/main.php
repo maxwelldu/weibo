@@ -54,10 +54,6 @@ AppAsset::register($this);
                     'label' => '我的空间',
                     'url' => ['/redis/space'],
                 ];
-                $menuItems[] = [
-                    'label' => '聊天室',
-                    'url' => ['/redis/chat'],
-                ];
 
             }
             echo Nav::widget([

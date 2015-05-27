@@ -230,6 +230,11 @@ class RedisController extends Controller
         return $this->render("chat");
     }
 
+    public function actionChatting()
+    {
+        Yii::$app->redis->publish("chat", "test");
+    }
+
     /**
      * 发布微博
      */
