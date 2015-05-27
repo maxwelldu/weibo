@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?php
                         if(Yii::$app->session->get('userid')>0) :
                             ?>
-                            <?= Html::a('关注', '?r=redis/follow&userid='.$i++,  ['class' => 'btn btn-primary']) ?>
+                            <?= Html::a('取消关注', '?r=redis/delfollow&userid='.$i++,  ['class' => 'btn btn-primary']) ?>
                         <?php
                         endif;
                         ?>

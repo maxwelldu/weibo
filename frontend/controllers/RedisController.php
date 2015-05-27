@@ -245,6 +245,33 @@ class RedisController extends Controller
         return $this->goHome();
     }
 
+    /**
+     * 取消关注动作
+     */
+    public function actionDelfollow()
+    {
+        $userID = Yii::$app->session->get("userid");
+        if($userID<1) {
+            $this->goBack();
+        }
+
+        $followUserID = Yii::$app->request->get("userid");
+
+        // 不能重复添加粉丝, 这里使用集合, 如果存在则会忽略, 不存在则会新建
+        if ( Yii::$app->redis->srem("followers:$followUserID", $userID) == 1 ) {
+            // 被关注的用户粉丝数-1
+            Yii::$app->redis->hincrby("user:$followUserID", "fans", -1);
+        }
+
+
+        // 删除关注
+        if(Yii::$app->redis->srem("following:$userID", $followUserID)) {
+            // 当前用户的关注数-1
+            Yii::$app->redis->hincrby("user:$userID", "followings", -1);
+        }
+        return $this->goBack();
+    }
+
 
     /**
      * 我的页面
