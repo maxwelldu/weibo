@@ -221,6 +221,15 @@ class RedisController extends Controller
         ]);
     }
 
+
+    /**
+     * 聊天室
+     */
+    public function actionChat()
+    {
+        return $this->render("chat");
+    }
+
     /**
      * 发布微博
      */
@@ -316,6 +325,7 @@ class RedisController extends Controller
         }
         $this->goBack();
     }
+
 
 
 
