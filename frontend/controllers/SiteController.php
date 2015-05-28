@@ -178,10 +178,10 @@ class SiteController extends Controller
     {
         $key = "username";
         //Yii::$app->cache->delete($key);
-        $value = Yii::$app->cache->get($key);
+        $value = Yii::$app->memcache->get($key);
         if ($value === false) {
             $value = "maxwelldu ";
-            Yii::$app->cache->set($key, $value, 30);
+            Yii::$app->memcache->set($key, $value, 30);
         }
         return $value;
     }
