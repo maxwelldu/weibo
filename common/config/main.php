@@ -13,6 +13,10 @@ return [
                 ],
             ],
         ],
+        'session' => [
+            'class' => '\yii\web\CacheSession',
+            'cache' => 'cache',
+        ],
     ],
     'language' => 'zh-CN',
 ];

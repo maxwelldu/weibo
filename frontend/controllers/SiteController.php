@@ -176,7 +176,7 @@ class SiteController extends Controller
      */
 	public function actionTestMemcache()
     {
-        $key = "username";
+        $key = "test";
         //Yii::$app->cache->delete($key);
         $value = Yii::$app->cache->get($key);
         if ($value === false) {
