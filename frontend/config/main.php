@@ -19,17 +19,6 @@ return [
             'port' => 6379,
             'database' => 0,
         ],
-    	'memcache' => [
-                'class' => '\yii\caching\MemCache',
-                'useMemcached' => true,
-                'servers' => [
-                        [
-                                'host' => '127.0.0.1',
-                                'port' => 11211,
-                                'weight' => 100,
-                        ],
-                ],
-        ],
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
