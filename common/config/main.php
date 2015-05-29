@@ -17,13 +17,7 @@ return [
             'class' => '\yii\web\CacheSession',
             'cache' => 'cache',
         ],
-        'db' => [
-            'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=rdsnnamnbnnamnbprivate.mysql.rds.aliyuncs.com;dbname=blog',
-            'username' => 'maxwelldu',
-            'password' => 'yu13jiu14',
-            'charset' => 'utf8',
-        ],
+
         'sphinx' => [
             'class' => 'yii\sphinx\Connection',
             'dsn' => 'mysql:host=rdsnnamnbnnamnbprivate.mysql.rds.aliyuncs.com;port=9306',

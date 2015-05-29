@@ -13,6 +13,7 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use frontend\models\User;
+use yii\sphinx\Query;
 
 /**
  * Site controller
@@ -225,11 +226,11 @@ class SiteController extends Controller
     public function actionTestSphinx()
     {
         $keyword = Yii::$app->request->get("keyword");
-        $sql = 'SELECT * FROM sphinx_article WHERE content = :content';
-        $params = [
-            'content' => $keyword
-        ];
-        $rows = Yii::$app->sphinx->createCommand($sql, $params)->queryAll();
+
+        $query = new Query;
+        $rows = $query->from('sphinx_article')
+            ->match($keyword)
+            ->all();
         var_dump($rows);
 
     }
