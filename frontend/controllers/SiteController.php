@@ -221,4 +221,16 @@ class SiteController extends Controller
         }
         */
     }
+
+    public function actionTestSphinx()
+    {
+        $keyword = Yii::$app->request->get("keyword");
+        $sql = 'SELECT * FROM sphinx_article WHERE content = :content';
+        $params = [
+            'content' => $keyword
+        ];
+        $rows = Yii::$app->sphinx->createCommand($sql, $params)->queryAll();
+        var_dump($rows);
+
+    }
 }

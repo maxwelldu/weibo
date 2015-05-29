@@ -26,7 +26,7 @@ return [
         ],
         'sphinx' => [
             'class' => 'yii\sphinx\Connection',
-            'dsn' => 'mysql:host=rdsnnamnbnnamnbprivate.mysql.rds.aliyuncs.com;dbname=blog',
+            'dsn' => 'mysql:host=rdsnnamnbnnamnbprivate.mysql.rds.aliyuncs.com;port=9306',
             'username' => 'maxwelldu',
             'password' => 'yu13jiu14',
         ],
